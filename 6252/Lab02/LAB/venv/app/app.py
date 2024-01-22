@@ -7,29 +7,32 @@ import uuid
 app = Flask(__name__)
 CORS(app)
 
+#Get all Categories
 @app.get('/categories')
 def get_categories():
     return {"categories": list(categories.values())}
 
-@app.get("/categories/<string:category_id")
+#Get a Specific Category
+@app.get("/categories/<int:category_id>")
 def get_category(category_id):
     try:
         return categories[category_id]
-    except KeyError:
+    except (ValueError, KeyError):
         abort(404, message="category not found.")
         
+#Create a Category
 @app.post("/categories")
-def create_categories():
-    categories_data = request.get_json()
-    if "category_name" not in categories_data:
-        abort(
-            400,
-            message="Bad request. Ensure category name is included in the JSON payload"
-        )
+def create_category():
+    request_data = request.get_json()
     
-    for categories in categories.values():
-        if categories_data["category_name"] == categories["category_name"]:
-            abort(400, message="Category already exists.")
+    if "category_name" not in request_data or request_data["category_name"] == "":
+        abort(400, message="Category name is required and cannot be empty.")
     
-    category_id = uuid.uuid4().hex
+    for category in categories.items():
+        if category["category_name"] == request_data["category_name"]:
+            abort(400, message="Category with the specified name already exists.")
+    
+    new_category = {"category_name": request_data["category_name"]}
+    categories[request_data["category_name"]] = new_category
+    return new_category, 201
     
