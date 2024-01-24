@@ -58,6 +58,7 @@ def delete_category(category_id):
 
     return {"message": "Category deleted successfully", "deleted_category": deleted_category}
 
+
 #PRODUCTS
 
 #Get all Products
@@ -74,7 +75,7 @@ def get_product_by_id(product_id):
     else:
        return abort(404, description="Product ID not found.")
    
-   #Create a Product
+#Create a Product
 @app.post("/products")
 def create_product():
     request_data = request.get_json()
@@ -83,15 +84,12 @@ def create_product():
     if not all(field in request_data for field in required_fields):
         return abort(400, description="Bad request. JSON payload must include 'category_id', 'product_code', 'product_name', and 'price'.")
 
-    # Check if the specified category ID exists
     category_id = int(request_data['category_id'])
     if category_id not in categories:
         return abort(400, description=f"Bad request. Category ID '{category_id}' does not exist.")
 
-    # Determine the new product ID
     new_product_id = max(products.keys()) + 1
 
-    # Create the new product
     new_product = {
         "product_id": new_product_id,
         "category_id": category_id,
@@ -100,7 +98,48 @@ def create_product():
         "price": request_data["price"]
     }
 
-    # Add the new product to the products dictionary
     products[new_product_id] = new_product
 
-    return new_product, 201  # Return the new product with status code 201 (Created)
+    return new_product, 201
+
+#Delete Product
+@app.delete("/products/<int:product_id>")
+def delete_product(product_id):
+    
+    if product_id not in products:
+        return abort(404, description="Product ID not found.")
+
+    
+    deleted_product = products.pop(product_id)
+
+    return {"message": "Product deleted successfully", "deleted_product": deleted_product}
+
+#Update Product
+@app.put("/products/<int:product_id>")
+def update_product(product_id):
+
+    if product_id not in products:
+        return abort(404, description="Product ID not found.")
+
+    request_data = request.get_json()
+
+    required_fields = ['category_id', 'product_code', 'product_name', 'price']
+    if not all(field in request_data for field in required_fields):
+        return abort(400, description="Bad request. JSON payload must include 'category_id', 'product_code', 'product_name', and 'price'.")
+
+    category_id = int(request_data['category_id'])
+
+    if category_id not in categories:
+        return abort(400, description=f"Bad request. Category ID '{category_id}' does not exist.")
+
+    updated_product = {
+        "product_id": product_id,
+        "category_id": category_id,
+        "product_code": request_data["product_code"],
+        "product_name": request_data["product_name"],
+        "price": request_data["price"]
+    }
+
+    products[product_id] = updated_product
+
+    return {"message": "Product updated successfully", "updated_product": updated_product}
