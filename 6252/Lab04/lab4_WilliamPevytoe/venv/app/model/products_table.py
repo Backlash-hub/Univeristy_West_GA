@@ -116,7 +116,3 @@ class ProductsTable:
         if product is not None:
             product = dict(product)
         return True, "Product updated successfully", product
-        
-            
-            
-

@@ -126,8 +126,6 @@ def update_product(product_id):
         return {"error": str(error)}, 500
             
         
-    
-
 @app.teardown_appcontext
 def close_connection(exception):
     close_db()
