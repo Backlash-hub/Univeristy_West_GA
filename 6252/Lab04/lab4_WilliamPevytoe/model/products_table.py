@@ -26,6 +26,7 @@ class ProductsTable:
     
     @staticmethod
     def add_new_product(product_data):
+        """Inserts a new product into the products table."""
         db = get_db()
         category_id = product_data.get('category_id')
         product_code = product_data.get('product_code')
@@ -63,6 +64,7 @@ class ProductsTable:
     
     @staticmethod
     def delete(product_id):
+        """Removes a product from the products table."""
         db = get_db()
         product = ProductsTable.get_by_id(product_id)
         if product is None:
@@ -76,6 +78,7 @@ class ProductsTable:
     
     @staticmethod
     def update(product_id, product_data):
+        """Updates a product with the specified ID in the products table."""
         db = get_db()
         category_id = product_data.get('category_id')
         product_code = product_data.get('product_code')
