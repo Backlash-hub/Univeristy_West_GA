@@ -73,6 +73,49 @@ class ProductsTable:
         db.execute(query, data)
         db.commit()
         return True, "The product has been deleted", product
+    
+    @staticmethod
+    def update(product_id, product_data):
+        db = get_db()
+        category_id = product_data.get('category_id')
+        product_code = product_data.get('product_code')
+        product_name = product_data.get('product_name')
+        price = product_data.get('price')
+        
+        if None in (category_id, product_code, product_name, price):
+            return False, "Missing required fields", None
+
+        query = "SELECT * FROM CATEGORIES WHERE CategoryID = ?"
+        data = [category_id]
+        result = db.execute(query, data)
+        category = result.fetchone()
+        if category is None:
+            return False, "Category not found", None
+        
+        query = "SELECT * FROM PRODUCTS WHERE ProductID = ?"
+        data = [product_id]
+        result = db.execute(query, data)
+        existing_product = result.fetchone()
+        if existing_product is None:
+            return False, "Product not found.", None
+        
+        query = """
+            UPDATE PRODUCTS 
+            SET CategoryID = ?, ProductCode = ?, ProductName = ?, Price = ?
+            WHERE ProductID = ?
+        """
+        
+        data = [category_id, product_code, product_name, price, product_id]
+        db.execute(query, data)
+        db.commit()
+
+        query = "SELECT * FROM PRODUCTS WHERE ProductID = ?"
+        data = [product_id]
+        result = db.execute(query, data)
+        product = result.fetchone()
+        if product is not None:
+            product = dict(product)
+        return True, "Product updated successfully", product
         
             
             

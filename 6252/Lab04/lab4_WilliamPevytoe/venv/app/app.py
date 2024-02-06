@@ -101,6 +101,29 @@ def delete_product(product_id):
         return {"message": "Product was deleted"}
     except sqlite3.Error as error:
         return {"error": str(error)}, 500
+    
+@app.put("/product/<int:product_id>")
+def update_product(product_id):
+    product_data = request.get_json()
+    
+    # Ensure required fields are present in the request
+    required_fields = ['category_id', 'product_code', 'product_name', 'price']
+    if not all(field in product_data for field in required_fields):
+        return {"error": "Missing required fields"}, 400
+    
+    # Check if the specified category ID exists
+    category_id = product_data['category_id']
+    category = CategoriesTable.get_by_id(category_id)
+    if category is None:
+        return {"error": "Category not found"}, 400
+    
+    try:
+        success, message, product = ProductsTable.update(product_id, product_data)
+        if not success:
+            return {"error": message}, 404 if message == "Product not found." else 400
+        return product, 200
+    except sqlite3.Error as error:
+        return {"error": str(error)}, 500
             
         
     
