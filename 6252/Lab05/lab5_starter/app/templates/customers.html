@@ -3,30 +3,25 @@
 {% block content %}
 <main>
     <h1>Customers</h1>
-    <div call="scroll">
-        <div class="customer-list">
-            <ol>
-                {% for customer in customers %}
-                <li>
-                    <strong>{{ customer.LastName|upper }}</strong>,
-                    {% if customer.PreferredName %}
-                        {{ customer.PreferredName }}
-                    {% else %}
-                        {{ customer.FirstName }}
-                    {% endif %}
-                    <br>
-                    {{ customer.Email }}
-                    {% if customer.PhoneNumber %}
-                        <br>{{ customer.PhoneNumber }}
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ol>
-        </div>
+    <div class="scroll">
+        <ol>
+            {% for customer in customers %}
+            <li>
+                {{ customer.LastName|upper }},
+                {% if customer.PreferredName %}
+                    {{ customer.PreferredName|upper }}
+                {% else %}
+                    {{ customer.FirstName|upper }}
+                {% endif %}
+                <br>
+                Email: {{ customer.Email }}
+                {% if customer.Phone %}
+                    <br>Phone: {{ customer.Phone }}
+                {% endif %}
+            </li>
+            <br>
+            {% endfor %}
+        </ol>
     </div>
 </main>
-
-
-
-
 {% endblock %}
