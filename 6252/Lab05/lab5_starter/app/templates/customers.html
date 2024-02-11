@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Customers</h1>
+    <div call="scroll">
+        <div class="customer-list">
+            <ol>
+                {% for customer in customers %}
+                <li>
+                    <strong>{{ customer.LastName|upper }}</strong>,
+                    {% if customer.PreferredName %}
+                        {{ customer.PreferredName }}
+                    {% else %}
+                        {{ customer.FirstName }}
+                    {% endif %}
+                    <br>
+                    {{ customer.Email }}
+                    {% if customer.PhoneNumber %}
+                        <br>{{ customer.PhoneNumber }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</main>
+
+
+
+
+{% endblock %}

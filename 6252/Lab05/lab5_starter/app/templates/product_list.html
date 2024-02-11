@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Products</h1>
+    <div class="scroll">
+        <!-- display a table of products -->
+        {% if products %}
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th class="right">Price</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.ProductCode }}</td>
+                <td>{{ product.ProductName }}</td>
+                <td class="right">{{ product.Price }}</td>
+                <td>
+                    <form method="GET">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <div> There are no customers.</div>
+        {% endif %}
+    </div>   
+    <p class="last_paragraph">
+        <a href="{{ url_for('category_list') }}">View Categories List</a>
+    </p>
+</main>
+{% endblock %}
