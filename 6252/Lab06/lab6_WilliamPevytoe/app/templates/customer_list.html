@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Customer List</h1>
+
+    <aside>
+        <h2>Customers</h2>
+        <ul class="scroll">
+            {% for customer in customers %}
+            <li><a href="{{ url_for('customer_list', customer_id=customer['CustomerID']) }}">{{ customer['LastName'] }}, {{ customer['PreferredName'] or customer['FirstName'] }}</a></li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <section id="customer-details">
+        {% if selected_customer %}
+        <h2>{{ selected_customer['LastName'] }}, {{ selected_customer['PreferredName'] or selected_customer['FirstName'] }}</h2>
+        <p>
+            <span class="customerlabel">Last name:</span> {{ selected_customer['LastName'] }}<br>
+            <span class="customerlabel">First name:</span> {{ selected_customer['FirstName'] }}<br>
+            <span class="customerlabel">Preferred name:</span> {{ selected_customer['PreferredName'] or "N/A" }}<br>
+            <span class="customerlabel">Email:</span> {{ selected_customer['Email'] or "N/A" }}<br>
+            <span class="customerlabel">Phone:</span> {{ selected_customer['Phone'] or "N/A" }}
+        </p>
+        {% else %}
+        <p>Please select a customer from the list on the left.</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

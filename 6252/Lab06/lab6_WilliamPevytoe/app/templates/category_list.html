@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Category List</h1>
+
+    <section>
+        <!-- display a table of categories -->
+        {% if categories %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.CategoryName }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('delete_category') }}">
+                        <input type="hidden" name="category_id" value="{{ category.CategoryID }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h1>Add Category</h1>
+        <form method="post" action="{{ url_for('category_list') }}">
+            <label for="category_name">Name:</label>
+            <input type="text" id="category_name" name="category_name">
+            <button type="submit">Add Category</button>
+        </form>
+        {% else %}
+            <div> There are no categories.</div>
+        {% endif %}
+
+        <p class="last_paragraph">
+            <a href="{{ url_for('product_list') }}">View Product List</a>
+        </p>
+    </section>
+</main>
+{% endblock %}

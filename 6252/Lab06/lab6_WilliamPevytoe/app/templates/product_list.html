@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Product List</h1>
+
+    <aside>
+        <!-- display a list of categories -->
+        <h2>Categories</h2>
+        <ul>
+            {% for category in categories %}
+            <li>
+                <a href="{{ url_for('product_list', category_id=category.CategoryID) }}">
+                    {{ category.CategoryName }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <section>
+        <!-- display a table of products -->
+        <h2> {{ category_name }} </h2>
+        {% if products %}
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th class="right">Price</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.ProductCode }}</td>
+                <td>{{ product.ProductName }}</td>
+                <td class="right">{{ '%.2f'|format(product.Price) }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('delete_product') }}">
+                        <input name="product_id" type="hidden" value="{{ product.ProductID }}">
+                        <input name="category_id" type="hidden" value="{{ product.CategoryID }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <div> There are not products in this category.</div>
+        {% endif %}
+
+        <p class="last_paragraph">
+            <a href="{{ url_for('category_list') }}">Manage Categories</a>
+        </p>
+    </section>
+</main>
+{% endblock %}
