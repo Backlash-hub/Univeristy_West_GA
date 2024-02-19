@@ -168,3 +168,16 @@ input[type=number]{
     max-height: 300px;
     overflow: auto;
 }
+
+.customerlabel {
+    font-weight: bold;
+}
+
+/* #customer-details table {
+    border-collapse: collapse;
+} */
+
+#customer-details table, #customer-details th, #customer-details td {
+    border: none;
+    padding: 8px;
+}

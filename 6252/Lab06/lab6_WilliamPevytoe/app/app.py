@@ -137,10 +137,16 @@ def customer_list():
 
     # Retrieve list of customers sorted by last name
     customers = CustomersTable.get()
+    
+    customer_id = request.args.get("customer_id")
+    selected_customer = None
+    if customer_id:
+        selected_customer = CustomersTable.get_by_id(customer_id)
 
     return render_template(
         "customer_list.html",
         customers=customers,
+        selected_customer=selected_customer
     )
 
 
