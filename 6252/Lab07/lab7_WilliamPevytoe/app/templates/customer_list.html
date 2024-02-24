@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Customer List</h1>
+
+    <aside>
+        <!-- display a list of customers -->
+        <h2>Customers</h2>
+        <ul class="scroll">
+            {% for customer in customers %}
+            <li>
+                <a href="{{ url_for('customer_list', customer_id=customer.CustomerID) }}">
+                    {{ customer.LastName }},
+                    {% if customer.PreferredName %}
+                        {{ customer.PreferredName }}
+                    {% else %}
+                        {{ customer.FirstName }}
+                    {% endif %}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <section>
+        <h2>{{ customer.FirstName }} {{ customer.LastName }}</h2>
+        <!-- display the customers information -->
+        <span class="customerlabel">Last name:</span> {{ customer.LastName }}<br>
+        <span class="customerlabel">First name:</span> {{ customer.FirstName }}<br>
+        <span class="customerlabel">Preferred name:</span> {% if customer.PreferredName %}
+            {{ customer.PreferredName }}
+        {% else %}
+            no preferred name on file
+        {% endif %}<br>
+        <span class="customerlabel">Email:</span> {{ customer.Email }}<br>
+        <span class="customerlabel">Phone:</span> 
+        {% if customer.Phone %}
+            {{ customer.Phone }}
+        {% else %}
+            no phone number on file
+        {% endif %}
+        <form method="post" action="{{ url_for('delete_customer') }}">
+            {{ delete_form.csrf_token }}  <!-- Add CSRF token -->
+            {{ delete_form.customer_id(value=customer.CustomerID) }}  <!-- Add customer_id field -->
+            {{ delete_form.submit() }}  <!-- Render submit button -->
+        </form>
+    </section>
+</main>
+{% endblock %}

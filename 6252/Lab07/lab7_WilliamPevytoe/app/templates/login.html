@@ -1,0 +1,19 @@
+{% from 'macros/forms.html' import errors %}
+{% extends "base.html" %}
+
+{% block content %}
+
+<main>
+    <h1>Login</h1>
+    <p>
+        <form method="POST" id="login_form" >
+            {{ login_form.csrf_token }}
+            {{ login_form.passcode.label }} {{ login_form.passcode() }}
+            {{ errors(login_form.passcode) }}
+            <br>
+            <label>&nbsp;</label> {{ login_form.submit() }}
+            <br>
+        </form>
+    </p>
+</main>
+{% endblock %}

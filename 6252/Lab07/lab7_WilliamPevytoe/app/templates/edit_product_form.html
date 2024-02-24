@@ -1,0 +1,30 @@
+{% from 'macros/forms.html' import errors %}
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Edit Product</h1>
+    <form method="POST" id="product_form" action="{{ url_for('edit_product') }}" novalidate>
+        {{ edit_form.csrf_token }}
+        {{ edit_form.product_id() }}
+
+        {{ edit_form.category.label }} {{ edit_form.category() }}
+        <br>
+        {{ edit_form.code.label }} {{ edit_form.code() }}
+        {{ errors(edit_form.code) }}
+        <br>
+        {{ edit_form.name.label }} {{ edit_form.name() }}
+        {{ errors(edit_form.name) }}
+        <br>
+        {{ edit_form.price.label }} {{ edit_form.price() }}
+        {{ errors(edit_form.price) }}
+        <br>
+        <label>&nbsp;</label>{{ edit_form.submit() }}
+        <br>
+    </form>
+
+    <p class>
+        <a href="{{ url_for('product_list') }}">View Product List</a>
+    </p>
+</main>
+{% endblock %}
