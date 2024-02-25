@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, SubmitField, HiddenField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms import SelectField, StringField, SubmitField, HiddenField, DecimalField
+from wtforms.validators import DataRequired, ValidationError, NumberRange
 from model.products_table import ProductsTable
+from model.categories_table import CategoriesTable
 
 
 class EditProductForm(FlaskForm):
@@ -59,3 +60,16 @@ class DeleteProductButton(FlaskForm):
 class EditProductButton(FlaskForm):
     product_id = HiddenField(validators=[DataRequired()])
     submit = SubmitField("Edit")
+
+class AddProductForm(FlaskForm):
+    # Initialize the category choices inside the __init__ method
+    def __init__(self, *args, **kwargs):
+        super(AddProductForm, self).__init__(*args, **kwargs)
+        self.category.choices = [(category['CategoryID'], category['CategoryName']) for category in CategoriesTable.get()]
+    # Define form fields
+    category = SelectField('Category', validators=[DataRequired()])
+    code = StringField('Product Code', validators=[DataRequired()])
+    name = StringField('Product Name', validators=[DataRequired()])
+    price = DecimalField('Price', validators=[DataRequired(), NumberRange(min=0.01, message="Price must be greater than 0")])
+    submit = SubmitField('Add Product')
+    

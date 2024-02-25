@@ -41,9 +41,9 @@
             no phone number on file
         {% endif %}
         <form method="post" action="{{ url_for('delete_customer') }}">
-            {{ delete_form.csrf_token }}  <!-- Add CSRF token -->
-            {{ delete_form.customer_id(value=customer.CustomerID) }}  <!-- Add customer_id field -->
-            {{ delete_form.submit() }}  <!-- Render submit button -->
+            {{ delete_form.csrf_token }}
+            {{ delete_form.customer_id(value=customer.CustomerID) }} 
+            {{ delete_form.submit() }} 
         </form>
     </section>
 </main>

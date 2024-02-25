@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, url_for, flash, session
+from flask import Flask, current_app, request, redirect, render_template, url_for, flash, session
 from model.database import close_db
 from model.categories_table import CategoriesTable
 from model.products_table import ProductsTable
@@ -6,16 +6,22 @@ from model.customers_table import CustomersTable
 from forms.product_forms import (
     DeleteProductButton, 
     EditProductButton, 
-    EditProductForm
+    EditProductForm,
+    AddProductForm
 )
 from forms.customer_form import DeleteCustomerButton
-from forms.category_forms import DeleteCategoryButton
+from forms.category_forms import (
+    DeleteCategoryButton,
+    AddCategoryForm
+)
 from forms.login_form import LoginForm
+import logging
+
+
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "this is the secret string"
-
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -164,22 +170,24 @@ def category_list():
     add_error = ""
     name = ""
 
-    # process the add form if submitted
-    if request.method == "POST":
-        category = {}
-        category["category_name"] = request.form["name"]
-        success, add_error, _ = CategoriesTable.insert(category)
+    add_form = AddCategoryForm()  # Instantiate the AddCategoryForm
+
+    # Process the add form if submitted
+    if add_form.validate_on_submit():
+        category_name = add_form.name.data
+        success, add_error, _ = CategoriesTable.insert({"category_name": category_name})
         if success:
             return redirect(url_for("category_list"))
         else:
-            name = category["category_name"]
+            name = category_name
         
     return render_template(
         "category_list.html", 
         delete_button = DeleteCategoryButton(),
         categories=categories,
         add_error=add_error,
-        name=name
+        name=name,
+        add_form = add_form
     )
 
 
@@ -212,10 +220,8 @@ def customer_list():
             customer_id = customers[0]["CustomerID"]
     else:
         customer_id = customers[0]["CustomerID"]
-    customer = CustomersTable.get_by_id(customer_id)
-    
-    delete_button = DeleteCategoryButton()
-    
+    customer = CustomersTable.get_by_id(customer_id) 
+     
     delete_form = DeleteCustomerButton()
     delete_form.customer_id.data = customer_id
     
@@ -228,9 +234,9 @@ def customer_list():
     
 @app.route('/delete_customer', methods=['POST'])
 def delete_customer():
-    form = DeleteCustomerButton(request.form)  # Instantiating the form with request.form
+    form = DeleteCustomerButton(request.form) 
     if form.validate_on_submit():
-        customer_id = form.customer_id.data  # Extracting customer_id from form data
+        customer_id = form.customer_id.data 
         deleted_customer = CustomersTable.delete(customer_id)
         if deleted_customer:
             flash('Customer deleted successfully!', 'success')
@@ -239,6 +245,47 @@ def delete_customer():
     else:
         flash('Form submission error.', 'error')
     return redirect(url_for('customer_list'))
+
+
+@app.route("/add_product", methods=["GET", "POST"])
+def add_product():
+    # Ensure that code runs within the application context
+    with app.app_context():
+        # Check if the request method is POST
+        if request.method == "POST":
+            # If it's a POST request, create an instance of the AddProductForm
+            form = AddProductForm(request.form)
+
+            # Check if the form data is valid
+            if form.validate_on_submit():
+                # Process form submission
+                product_data = {
+                    "category_id": form.category.data,
+                    "product_code": form.code.data,
+                    "product_name": form.name.data,
+                    "price": form.price.data
+                }
+
+                # Insert the product data into the database
+                success, message, _ = ProductsTable.insert(product_data)
+                if success:
+                    # If the product is successfully added, redirect to the product list page
+                    flash("Product added successfully!", "success")
+                    return redirect(url_for("product_list"))
+                else:
+                    # If there's an error adding the product, display an error message
+                    flash(f"Failed to add product: {message}", "error")
+            else:
+                # If the form data is invalid, display an error message
+                flash("Failed to add product: Form data is invalid", "error")
+
+        # If it's a GET request or if form validation fails, render the add product form
+        categories = CategoriesTable.get()
+        form = AddProductForm()
+        form.category.choices = [(category['CategoryID'], category['CategoryName']) for category in categories]
+        return render_template("add_product.html", form=form, categories=categories)
+
+
     
 
 @app.teardown_appcontext

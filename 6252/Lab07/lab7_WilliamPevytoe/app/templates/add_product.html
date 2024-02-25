@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <h1>Add Product</h1>
+    <form method="post" id="product_form" action="{{ url_for('add_product') }}">
+
+        <table>
+            <tr>
+                <td><label for="category">Category:</label></td>
+                <td>{{ form.category }}</td>
+            </tr>
+            <tr>
+                <td><label for="code">Product Code:</label></td>
+                <td>{{ form.code }}</td>
+            </tr>
+            <tr>
+                <td><label for="name">Product Name:</label></td>
+                <td>{{ form.name }}</td>
+            </tr>
+            <tr>
+                <td><label for="price">Price:</label></td>
+                <td>{{ form.price }}</td>
+            </tr>
+        </table>
+
+        <br>
+        <input type="submit" value="Add Product">
+    </form>
+</main>
+{% endblock %}

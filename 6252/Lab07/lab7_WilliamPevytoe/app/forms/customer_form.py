@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, SubmitField, HiddenField
-from wtforms.validators import DataRequired, ValidationError
-from model.customers_table import CustomersTable
+from wtforms import SubmitField, HiddenField
+from wtforms.validators import DataRequired
 
 class DeleteCustomerButton(FlaskForm):
     customer_id = HiddenField(validators=[DataRequired()])
