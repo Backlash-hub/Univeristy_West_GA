@@ -1,31 +1,27 @@
+{% from 'macros/forms.html' import errors %}
 {% extends "base.html" %}
 
 {% block content %}
 <main>
     <h1>Add Product</h1>
-    <form method="post" id="product_form" action="{{ url_for('add_product') }}">
+    <form method="POST" id="product_form" action="{{ url_for('add_product') }}" novalidate>
+        {{ add_form.csrf_token }}
+        {{ add_form.product_id() }}
+        
 
-        <table>
-            <tr>
-                <td><label for="category">Category:</label></td>
-                <td>{{ form.category }}</td>
-            </tr>
-            <tr>
-                <td><label for="code">Product Code:</label></td>
-                <td>{{ form.code }}</td>
-            </tr>
-            <tr>
-                <td><label for="name">Product Name:</label></td>
-                <td>{{ form.name }}</td>
-            </tr>
-            <tr>
-                <td><label for="price">Price:</label></td>
-                <td>{{ form.price }}</td>
-            </tr>
-        </table>
-
+        {{ add_form.category.label }} {{ add_form.category() }}
         <br>
-        <input type="submit" value="Add Product">
+        {{ add_form.code.label }} {{ add_form.code() }}
+        {{ errors(add_form.code) }}
+        <br>
+        {{ add_form.name.label }} {{ add_form.name() }}
+        {{ errors(add_form.name) }}
+        <br>
+        {{ add_form.price.label }} {{ add_form.price() }}
+        {{ errors(add_form.price) }}
+        <br>
+        {{ add_form.submit() }}
+        <br>
     </form>
 </main>
 {% endblock %}

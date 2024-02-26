@@ -58,18 +58,33 @@ class DeleteProductButton(FlaskForm):
 
 
 class EditProductButton(FlaskForm):
-    product_id = HiddenField(validators=[DataRequired()])
+    product_id = HiddenField()
     submit = SubmitField("Edit")
 
 class AddProductForm(FlaskForm):
-    # Initialize the category choices inside the __init__ method
-    def __init__(self, *args, **kwargs):
-        super(AddProductForm, self).__init__(*args, **kwargs)
-        self.category.choices = [(category['CategoryID'], category['CategoryName']) for category in CategoriesTable.get()]
-    # Define form fields
-    category = SelectField('Category', validators=[DataRequired()])
+    product_id = HiddenField()
+    category = SelectField("Category:", choices=[], validators=[DataRequired()])
     code = StringField('Product Code', validators=[DataRequired()])
     name = StringField('Product Name', validators=[DataRequired()])
-    price = DecimalField('Price', validators=[DataRequired(), NumberRange(min=0.01, message="Price must be greater than 0")])
+    price = DecimalField('Price', validators=[DataRequired()])
     submit = SubmitField('Add Product')
-    
+
+    def validate_code(self, field):
+        valid, message = ProductsTable.validate_updated_code(field.data, self.product_id.data)
+        if not valid:
+            raise ValidationError(message)
+
+    def validate_name(self, field):
+        valid, message = ProductsTable.validate_name(field.data)
+        if not valid:
+            raise ValidationError(message)
+
+    def validate_price(self, field):
+        valid, message = ProductsTable.validate_price_string(str(field.data))
+        if not valid:
+            raise ValidationError(message)
+
+    # Populate the category choices dynamically
+    def populate_categories(self):
+        categories = CategoriesTable.get()
+        self.category.choices = [(category['CategoryID'], category['CategoryName']) for category in categories]

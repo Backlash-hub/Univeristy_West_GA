@@ -506,3 +506,13 @@ class ProductsTable:
                 return False, "Price must be a nonnegative value with two decimal places."
 
         return True, "Price is valid."
+
+    @staticmethod
+    def get_highest_product_id():
+        try:
+            db = get_db()
+            query = "SELECT MAX(ProductID) FROM PRODUCTS"
+            result = db.execute(query)
+            return result
+        except sqlite3.Error as error:
+            print("ERROR: " + str(error))

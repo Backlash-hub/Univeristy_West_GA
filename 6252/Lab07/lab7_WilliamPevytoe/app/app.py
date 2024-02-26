@@ -1,5 +1,6 @@
 from flask import Flask, current_app, request, redirect, render_template, url_for, flash, session
 from model.database import close_db
+from flask_wtf.csrf import generate_csrf
 from model.categories_table import CategoriesTable
 from model.products_table import ProductsTable
 from model.customers_table import CustomersTable
@@ -15,9 +16,6 @@ from forms.category_forms import (
     AddCategoryForm
 )
 from forms.login_form import LoginForm
-import logging
-
-
 
 
 app = Flask(__name__)
@@ -249,44 +247,39 @@ def delete_customer():
 
 @app.route("/add_product", methods=["GET", "POST"])
 def add_product():
-    # Ensure that code runs within the application context
-    with app.app_context():
-        # Check if the request method is POST
-        if request.method == "POST":
-            # If it's a POST request, create an instance of the AddProductForm
-            form = AddProductForm(request.form)
-
-            # Check if the form data is valid
-            if form.validate_on_submit():
-                # Process form submission
-                product_data = {
-                    "category_id": form.category.data,
-                    "product_code": form.code.data,
-                    "product_name": form.name.data,
-                    "price": form.price.data
-                }
-
-                # Insert the product data into the database
-                success, message, _ = ProductsTable.insert(product_data)
-                if success:
-                    # If the product is successfully added, redirect to the product list page
-                    flash("Product added successfully!", "success")
-                    return redirect(url_for("product_list"))
-                else:
-                    # If there's an error adding the product, display an error message
-                    flash(f"Failed to add product: {message}", "error")
-            else:
-                # If the form data is invalid, display an error message
-                flash("Failed to add product: Form data is invalid", "error")
-
-        # If it's a GET request or if form validation fails, render the add product form
-        categories = CategoriesTable.get()
-        form = AddProductForm()
-        form.category.choices = [(category['CategoryID'], category['CategoryName']) for category in categories]
-        return render_template("add_product.html", form=form, categories=categories)
-
-
+    # If it's a POST request, create an instance of the AddProductForm
+    add_form = AddProductForm()
     
+    add_form.populate_categories()
+
+    # Check if the request method is POST and form data is valid
+    if add_form.validate_on_submit():
+        # Process form submission
+        product_data = {
+            "product_id": ProductsTable.get_highest_product_id() + 1,
+            "category_id": add_form.category.data,
+            "product_code": add_form.code.data,
+            "product_name": add_form.name.data,
+            "price": add_form.price.data
+        }
+
+        # Insert the product data into the database
+        success, message, _ = ProductsTable.insert(product_data)
+        if success:
+            # If the product is successfully added, redirect to the product list page
+            flash("Product added successfully!", "success")
+            return redirect(url_for("product_list"))
+        else:
+            # If there's an error adding the product, display an error message
+            flash(f"Failed to add product: {message}", "error")
+    elif request.method == "POST":
+        # If the form data is invalid, display an error message
+        flash("Failed to add product: Form data is invalid", "error")
+        # Print out form errors for debugging
+        print(add_form.errors)
+
+    # Render the add product form
+    return render_template("add_product.html", add_form=add_form)
 
 @app.teardown_appcontext
 def close_connection(exception):
