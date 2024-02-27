@@ -247,7 +247,7 @@ def delete_customer():
 
 @app.route("/add_product", methods=["GET", "POST"])
 def add_product():
-    # If it's a POST request, create an instance of the AddProductForm
+    # Create an instance of the AddProductForm
     add_form = AddProductForm()
     
     add_form.populate_categories()
@@ -256,11 +256,10 @@ def add_product():
     if add_form.validate_on_submit():
         # Process form submission
         product_data = {
-            "product_id": ProductsTable.get_highest_product_id() + 1,
             "category_id": add_form.category.data,
             "product_code": add_form.code.data,
             "product_name": add_form.name.data,
-            "price": add_form.price.data
+            "price": float(add_form.price.data)
         }
 
         # Insert the product data into the database
@@ -272,8 +271,8 @@ def add_product():
         else:
             # If there's an error adding the product, display an error message
             flash(f"Failed to add product: {message}", "error")
+    # If the request method is POST but the form data is invalid
     elif request.method == "POST":
-        # If the form data is invalid, display an error message
         flash("Failed to add product: Form data is invalid", "error")
         # Print out form errors for debugging
         print(add_form.errors)

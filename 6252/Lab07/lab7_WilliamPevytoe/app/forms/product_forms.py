@@ -69,20 +69,21 @@ class AddProductForm(FlaskForm):
     price = DecimalField('Price', validators=[DataRequired()])
     submit = SubmitField('Add Product')
 
-    def validate_code(self, field):
-        valid, message = ProductsTable.validate_updated_code(field.data, self.product_id.data)
-        if not valid:
-            raise ValidationError(message)
+    # def validate_code(self, field):
+    #     if ProductsTable.validate_code(field.data):
+    #         raise ValidationError("Product code already exists.")
+    #     elif not field.data:
+    #         raise ValidationError("Product code is required.")
 
-    def validate_name(self, field):
-        valid, message = ProductsTable.validate_name(field.data)
-        if not valid:
-            raise ValidationError(message)
+    # def validate_name(self, field):
+    #     if ProductsTable.validate_name(field.data):
+    #         raise ValidationError("Product name already exists.")
+    #     elif not field.data:
+    #         raise ValidationError("Product name is required.")
 
-    def validate_price(self, field):
-        valid, message = ProductsTable.validate_price_string(str(field.data))
-        if not valid:
-            raise ValidationError(message)
+    # def validate_price(self, field):
+    #     if field.data is None or field.data < 0:
+    #         raise ValidationError("Price is required and cannot be negative.")
 
     # Populate the category choices dynamically
     def populate_categories(self):
