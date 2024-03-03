@@ -1,0 +1,6 @@
+[Estate location: [ Shotgun Shack ] Estate land area: [ 2 ] Estate structure area: [ 1 ]
+, Estate location: [ Yuge Estate ] Estate land area: [ 1000 ] Estate structure area: [ 20 ]
+, Estate location: [ Humble Home ] Estate land area: [ 4 ] Estate structure area: [ 1 ]
+, Estate location: [ No House ] Estate land area: [ 10 ] Estate structure area: [ 0 ]
+, Estate location: [ Good Location ] Estate land area: [ 10 ] Estate structure area: [ 3 ]
+]
