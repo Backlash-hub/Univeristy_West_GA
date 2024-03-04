@@ -94,3 +94,31 @@ class ReviewsTable:
         except sqlite3.Error as error:
             print("ERROR: " + str(error))
             abort(500)
+            
+    
+    @staticmethod
+    def get_sorted_by_highest_rating():
+        """Gets all the rows from the reviews table sorted by highest rating"""
+        try:
+            db = get_db()
+            result = db.execute("SELECT * FROM REVIEWS ORDER BY Rating DESC")
+            reviews = result.fetchall()
+            reviews = [dict(review) for review in reviews]
+            return reviews
+        except sqlite3.Error as error:
+            print("ERROR: " + str(error))
+            abort(500)
+
+    
+    @staticmethod
+    def get_sorted_by_lowest_rating():
+        """Gets all the rows from the reviews table sorted by lowest rating"""
+        try:
+            db = get_db()
+            result = db.execute("SELECT * FROM REVIEWS ORDER BY Rating ASC")
+            reviews = result.fetchall()
+            reviews = [dict(review) for review in reviews]
+            return reviews
+        except sqlite3.Error as error:
+            print("ERROR: " + str(error))
+            abort(500)
