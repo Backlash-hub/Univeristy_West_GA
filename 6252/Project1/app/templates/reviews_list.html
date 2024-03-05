@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews</title>
+    <link rel="stylesheet" href="static/project1.css">
+</head>
+<body>
+
+<header>
+    <h1>Reviews</h1>
+</header>
+
+<nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('reviews_list') }}">Reviews</a> 
+</nav>
+
+<section>
+    <h2>Customer Reviews</h2>
+    <a href="{{ url_for('add_review') }}">Add Review</a>
+    {% for review in reviews %}
+    <table>
+        <tr>
+            <td><strong>First Name</strong></td>
+            <td>{{ review['FirstName'] }}</td>
+        </tr>
+        <tr>
+            <td><strong>Last Name</strong></td>
+            <td>{{ review['LastName'] }}</td>
+        </tr>
+        <tr>
+            <td><strong>Date</strong></td>
+            <td>{{ review['Date'] }}</td>
+        </tr>
+        <tr>
+            <td><strong>Rating</strong></td>
+            <td>{{ review['Rating'] }}</td>
+        </tr>
+        <tr>
+            <td><strong>Comment</strong></td>
+            <td>{{ review['Comment'] }}</td>
+        </tr>
+    </table>
+    <hr> <!-- Add horizontal line to separate each review -->
+    {% endfor %}
+</section>
+
+
+
+
+</body>
+</html>

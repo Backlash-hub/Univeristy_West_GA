@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <link rel="stylesheet" href="static/project1.css">
+</head>
+<body>
+
+<header>
+    <h1>Plumbers R Us</h1>
+</header>
+
+<nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('reviews_list') }}">Reviews</a> 
+</nav>
+
+<section>
+    <h2>Check out some of our pictures</h2>
+    <div class="image">
+        <img src="images/plumber1.jpeg" alt="Image 1">
+        <p>Description of Image 1</p>
+    </div>
+    <div class="image">
+        <img src="images/plumber2.jpeg" alt="Image 2">
+        <p>Description of Image 2</p>
+    </div>
+    <div class="image">
+        <img src="images/plumber3.jpeg" alt="Image 3">
+        <p>Description of Image 3</p>
+    </div>
+</section>
+
+</body>
+</html>

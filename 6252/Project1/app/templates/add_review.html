@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review</title>
+    <link rel="stylesheet" href="static/project1.css">
+</head>
+<body>
+
+<header>
+    <h1>Add Review</h1>
+</header>
+
+<nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('reviews_list') }}">Reviews</a> 
+</nav>
+
+<section>
+    <h2>Enter Your Review</h2>
+    <form action="{{ url_for('add_review') }}" method="post">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.FirstName.label }} {{ form.FirstName(size=20) }}
+            {% if form.FirstName.errors %}
+                <ul>
+                {% for error in form.FirstName.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.LastName.label }} {{ form.LastName(size=20) }}
+            {% if form.LastName.errors %}
+                <ul>
+                {% for error in form.LastName.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.Date.label }} {{ form.Date }}
+            {% if form.Date.errors %}
+                <ul>
+                {% for error in form.Date.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.Rating.label }} {{ form.Rating }}
+            {% if form.Rating.errors %}
+                <ul>
+                {% for error in form.Rating.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.Comment.label }} {{ form.Comment(size=50) }}
+            {% if form.Comment.errors %}
+                <ul>
+                {% for error in form.Comment.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>{{ form.submit() }}</div>
+    </form>
+</section>
+
+</body>
+</html>

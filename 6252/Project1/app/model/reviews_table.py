@@ -41,17 +41,17 @@ class ReviewsTable:
     @staticmethod
     def insert(review_data):
         """Insters the specified review into the reviews table"""
-        
+    
         try:
             db = get_db()
             query = """
                 INSERT INTO reviews (FirstName, LastName, Date, Rating, Comment)
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """
             data = [
-                review_data["first_name"], review_data["last_name"],
-                review_data["date"], review_data["rating"],
-                review_data["comment"]
+                review_data["FirstName"], review_data["LastName"],
+                review_data["Date"], review_data["Rating"],
+                review_data["Comment"]
             ]
             db.execute(query, data)
             db.commit()
@@ -59,6 +59,7 @@ class ReviewsTable:
         except sqlite3.Error as error:
             print("ERROR: " + str(error))
             abort(500)
+
 
     
     @staticmethod

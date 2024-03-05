@@ -1,8 +1,8 @@
 import sys
-from flask import Flask, render_template
+from flask import Flask, flash, redirect, render_template, request, url_for
 from model.reviews_table import ReviewsTable
 from forms.reviews_form import AddReviewForm
-from model.database import close_db  # Import absolute path
+from model.database import close_db
 
 # Print Python path for debugging
 print("Python path:", sys.path)
@@ -20,16 +20,36 @@ def internal_server_error(error):
     return render_template("errors/500.html"), 500
 
 # Home page
-@app.route("/")
-@app.route("/index")
+@app.get("/")
+@app.get("/index")
 def home():
     return render_template("index.html")
 
 # Reviews list page
 @app.route("/reviews")
 def reviews_list():
-    reviews = ReviewsTable.get()  # Assuming ReviewsTable has a static method 'get' to fetch reviews
+    reviews = ReviewsTable.get()
     return render_template("reviews_list.html", reviews=reviews)
+
+# Add review page
+@app.route("/add_review", methods=["GET", "POST"])
+def add_review():
+    form = AddReviewForm()
+    if form.validate_on_submit():
+        review_data = {
+            "FirstName": form.FirstName.data,
+            "LastName": form.LastName.data,
+            "Date": form.Date.data,
+            "Rating": form.Rating.data,
+            "Comment": form.Comment.data
+        }
+        success, message = ReviewsTable.insert(review_data)
+        if success:
+            flash("Review added successfully!", "success")
+            return redirect(url_for("reviews_list"))
+        else:
+            flash(f"Failed to add review: {message}", "error")
+    return render_template("add_review.html", form=form)
 
 @app.teardown_appcontext
 def close_connection(exception):
