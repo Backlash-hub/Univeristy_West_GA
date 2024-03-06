@@ -140,7 +140,7 @@ class ReviewsTable:
             
     @staticmethod
     def get_sorted_by_name():
-        """Gets all the rows from the reviews table sorted by the name of the reviewer"""
+        """Gets all the rows from the reviews table sorted by reviewer's name"""
         try:
             db = get_db()
             result = db.execute("SELECT * FROM REVIEWS ORDER BY LastName ASC, FirstName ASC")
