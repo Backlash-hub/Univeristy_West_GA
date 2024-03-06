@@ -1,3 +1,4 @@
+import datetime
 from flask import abort
 import sqlite3
 from model.database import get_db
@@ -40,17 +41,20 @@ class ReviewsTable:
     
     @staticmethod
     def insert(review_data):
-        """Insters the specified review into the reviews table"""
-    
+        """Inserts the specified review into the reviews table"""
+
         try:
             db = get_db()
             query = """
                 INSERT INTO reviews (FirstName, LastName, Date, Rating, Comment)
                 VALUES (?, ?, ?, ?, ?)
                 """
+                
+            current_date = datetime.datetime.now().strftime("%m/%d/%Y")
+            
             data = [
                 review_data["FirstName"], review_data["LastName"],
-                review_data["Date"], review_data["Rating"],
+                current_date, review_data["Rating"],
                 review_data["Comment"]
             ]
             db.execute(query, data)
@@ -69,12 +73,9 @@ class ReviewsTable:
         try:
             db = get_db()
             query = "SELECT * FROM reviews WHERE Rating = ?"
-            data = [review_rating]
-            result = db.execute(query, data)
-            review = result.fetchall()
-            if review is not None:
-                review = dict(review)
-            return review
+            result = db.execute(query, (review_rating,))
+            reviews = result.fetchall()
+            return [dict(review) for review in reviews]
         except sqlite3.Error as error:
             print("ERROR: " + str(error))
             abort(500)
@@ -117,6 +118,32 @@ class ReviewsTable:
         try:
             db = get_db()
             result = db.execute("SELECT * FROM REVIEWS ORDER BY Rating ASC")
+            reviews = result.fetchall()
+            reviews = [dict(review) for review in reviews]
+            return reviews
+        except sqlite3.Error as error:
+            print("ERROR: " + str(error))
+            abort(500)
+            
+    @staticmethod
+    def get_sorted_by_recent():
+        """Gets all the rows from the reviews table sorted by most recent date"""
+        try:
+            db = get_db()
+            result = db.execute("SELECT * FROM REVIEWS ORDER BY Date DESC")
+            reviews = result.fetchall()
+            reviews = [dict(review) for review in reviews]
+            return reviews
+        except sqlite3.Error as error:
+            print("ERROR: " + str(error))
+            abort(500)
+            
+    @staticmethod
+    def get_sorted_by_name():
+        """Gets all the rows from the reviews table sorted by the name of the reviewer"""
+        try:
+            db = get_db()
+            result = db.execute("SELECT * FROM REVIEWS ORDER BY LastName ASC, FirstName ASC")
             reviews = result.fetchall()
             reviews = [dict(review) for review in reviews]
             return reviews

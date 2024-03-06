@@ -18,37 +18,46 @@
 </nav>
 
 <section>
-    <h2>Customer Reviews</h2>
-    <a href="{{ url_for('add_review') }}">Add Review</a>
-    {% for review in reviews %}
-    <table>
-        <tr>
-            <td><strong>First Name</strong></td>
-            <td>{{ review['FirstName'] }}</td>
-        </tr>
-        <tr>
-            <td><strong>Last Name</strong></td>
-            <td>{{ review['LastName'] }}</td>
-        </tr>
-        <tr>
-            <td><strong>Date</strong></td>
-            <td>{{ review['Date'] }}</td>
-        </tr>
-        <tr>
-            <td><strong>Rating</strong></td>
-            <td>{{ review['Rating'] }}</td>
-        </tr>
-        <tr>
-            <td><strong>Comment</strong></td>
-            <td>{{ review['Comment'] }}</td>
-        </tr>
-    </table>
-    <hr> <!-- Add horizontal line to separate each review -->
-    {% endfor %}
-</section>
+    <h2>Sort Customer Reviews</h2>
 
-
-
+     <form method="GET">
+        {{ form.hidden_tag() }}
+        {{ form.keyword.label }} {{ form.keyword() }}<br>
+        {{ form.rating.label }} {{ form.rating() }}<br>
+        {{ form.sort_by.label }} {{ form.sort_by() }}<br>
+        <button type="submit">Filter and Sort</button>
+    </form>
+    
+    <section>
+        <h2>Customer Reviews</h2>
+        <a href="{{ url_for('add_review') }}">Add Review</a>
+        {% for review in reviews %}
+        <table>
+            <tr>
+                <td><strong>First Name</strong></td>
+                <td>{{ review['FirstName'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Last Name</strong></td>
+                <td>{{ review['LastName'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date</strong></td>
+                <td>{{ review['Date'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Rating</strong></td>
+                <td>{{ review['Rating'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Comment</strong></td>
+                <td>{{ review['Comment'] }}</td>
+            </tr>
+        </table>
+        <hr> <!-- Add horizontal line to separate each review -->
+        {% endfor %}
+    </section>
+    
 
 </body>
 </html>
