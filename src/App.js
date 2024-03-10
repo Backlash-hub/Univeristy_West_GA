@@ -12,7 +12,7 @@ function App() {
       crossOrigin="anonymous"
     />
     <link rel="icon" href="bakery.ico" />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="bakery.css" />
     <header>
       <div className="container">
         <div className="wordmark p-3 fs-3 text-light bg-dark">
@@ -32,16 +32,8 @@ function App() {
                   Breads
                 </a>
               </li>
-              <li>
-                <a href="#" className="nav-link">
-                  Rolls
-                </a>
-              </li>
-              <li>
-                <a href="#" className="nav-link">
-                  Pastries
-                </a>
-              </li>
+              <li style={{ cursor: 'pointer' }} className="nav-link">Rolls</li>
+              <li style={{ cursor: 'pointer' }} className="nav-link">Pastries</li>
             </ul>
           </div>
           <div className="container px-4 py-3 bg-light">
