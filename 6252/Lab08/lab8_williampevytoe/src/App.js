@@ -1,3 +1,8 @@
+import Banner from "./commponents/Banner"
+import ProductsTable from './commponents/products/ProductsTable'
+import CategoryList from "./commponents/products/CategoryList";
+import Footer from "./commponents/Footer";
+
 function App() {
   return (
     <>
@@ -13,66 +18,17 @@ function App() {
       <link rel="icon" href="bakery.ico" />
       <link rel="stylesheet" href="bakery.css" />
       <header>
-        <div className="container">
-          <div className="wordmark p-3 fs-3 text-light bg-dark">
-            Wolfie's Bakery
-          </div>
-        </div>
+        <Banner />
       </header>
       <main>
         <div className="container">
           <div className="d-flex flex-row">
-            <div className="p-4 bg-light">
-              <span className="fw-bold">Categories</span>
-              <hr />
-              <ul className="nav nav-pills flex-column">
-                <li style={{ cursor: 'pointer' }} className="nav-link active">Breads</li>
-                <li style={{ cursor: 'pointer' }} className="nav-link">Rolls</li>
-                <li style={{ cursor: 'pointer' }} className="nav-link">Pastries</li>
-              </ul>
-            </div>
-            <div className="container px-4 py-3 bg-light">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Whole Wheat Bread</td>
-                    <td>$4.19</td>
-                  </tr>
-                  <tr>
-                    <td>Sourdough Bread</td>
-                    <td>$3.99</td>
-                  </tr>
-                  <tr>
-                    <td>Multigrain Bread</td>
-                    <td>$4.49</td>
-                  </tr>
-                  <tr>
-                    <td>Sandwich Bread</td>
-                    <td>$2.99</td>
-                  </tr>
-                  <tr>
-                    <td>Barguette</td>
-                    <td>$3.49</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <CategoryList />
+            <ProductsTable />
           </div>
         </div>
       </main>
-      <footer className="footer">
-        <div className="container">
-          <div className="wordmark p-3 text-light bg-dark">
-            © 2024 Wolfie's Bakery, Inc.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
