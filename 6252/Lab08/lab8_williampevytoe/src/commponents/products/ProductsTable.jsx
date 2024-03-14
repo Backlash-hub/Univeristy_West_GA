@@ -11,28 +11,26 @@ function ProductsTable() {
  ];
 
   return (
-    <ProductsTable>
-      <div className='container'>
-        <div className="container px-4 py-3 bg-light">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
+    <div className='container'>
+      <div className="container px-4 py-3 bg-light">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+                {products.map((product, index) => (
+              <tr key={index}>
+                <td>{product.name}</td>
+                <td>{product.price}</td>
               </tr>
-              </thead>
-              <tbody>
-                  {products.map((product, index) => (
-                <tr key={index}>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-      </div>
-    </ProductsTable>
+              ))}
+            </tbody>
+          </table>
+        </div>
+    </div>
   )
 }
 
