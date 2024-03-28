@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ProductRow from './ProductRow';
 import { productData } from '../database/Bakery';
 
 function ProductTable({ selectedCategory }) {
@@ -7,8 +8,10 @@ function ProductTable({ selectedCategory }) {
   const filteredProducts = products.filter(product => product.CategoryID === selectedCategory);
 
   const deleteProduct = (productId) => {
-    // Remove the product with the specified ID from the products state
-    setProducts(prevProducts => prevProducts.filter(product => product.ProductID !== productId));
+    const isConfirmed = window.confirm('Are you sure you want to delete this product?');
+    if (isConfirmed) {
+      setProducts(prevProducts => prevProducts.filter(product => product.ProductID !== productId));
+    }
   };
 
   return (
@@ -17,20 +20,12 @@ function ProductTable({ selectedCategory }) {
         <tr>
           <th>Product</th>
           <th className="text-end">Price</th>
-          <th className="text-end">Actions</th>
+          <th className="text-end"></th>
         </tr>
       </thead>
       <tbody>
         {filteredProducts.map(product => (
-          <tr key={product.ProductID}>
-            <td>{product.ProductName}</td>
-            <td className="text-end">{product.Price}</td>
-            <td className="text-end">
-              <button className="w-75 btn btn-primary" onClick={() => deleteProduct(product.ProductID)}>
-                Delete
-              </button>
-            </td>
-          </tr>
+          <ProductRow key={product.ProductID} product={product} deleteProduct={deleteProduct} />
         ))}
       </tbody>
     </table>

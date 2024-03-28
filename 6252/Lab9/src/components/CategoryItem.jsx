@@ -1,12 +1,11 @@
 import React from 'react';
 
-function CategoryItem({ category, isActive }) {
+function CategoryItem({ category, isActive, onClick }) {
   return (
-    <li className={`nav-item ${isActive ? 'active' : ''}`} style={{ cursor: 'pointer' }}>
-      <button className={`nav-link ${isActive ? 'active' : ''}`} onClick={() => console.log('Button clicked')}>{category.CategoryName}</button>
+    <li className={`nav-link ${isActive ? 'active' : ''}`} style={{ cursor: 'pointer' }} onClick={onClick}>
+      <button>{category.CategoryName}</button>
     </li>
   );
 }
 
 export default CategoryItem;
-
